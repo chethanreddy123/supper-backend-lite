@@ -261,8 +261,12 @@ async def getInformation(info : Request):
     print(await info.body())
     req_info = await info.json()
     ListOfCompanies = dict(req_info)["ListOfCompanies"]
+    FinalResults = []
+    for i in ListOfCompanies:
+        FinalResults.append(list(myData1.find({"SupplierName" : i['SupplierName']})))
     query = dict(req_info)["Query"]
-    result = generateTextWithPalm(prompts.getAnalysisPrompt(query, ListOfCompanies))
+    result = generateTextWithPalm(prompts.getAnalysisPrompt(query, FinalResults))
+    print(prompts.getAnalysisPrompt(query, FinalResults))
     return result
 
 @app.post("/multiCompanies")
