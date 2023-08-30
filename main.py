@@ -132,29 +132,16 @@ async def companySearch(info : Request):
 
 @app.post("/predictionSearch")
 async def predictionSearch(info : Request):
-    print(await info.body())
+    # print(await info.body())
     req_info = await info.json()
     CurrString = dict(req_info)["SearchedString"]
     Results = []
-
-    def get_data(n):
-        for i in List_Of_Clusters[n].find({"SupplierName" : CurrString}):
-            yield(i)
-
-
-    for i in range(1):
-        cuList = get_data(i)
-
-        while True:
-            try:
-                item = next(cuList)
-                del item['_id']
-                Results.append(item)
-
-            except StopIteration:
-                break
-
+    Finder = myData1.find({"SupplierName" : CurrString})
+    for i in Finder:
+        Results.append(i)
     CostList = []
+
+    # print(Results)
 
     for i in Results :
         if i['Cost'] > 1000 or i['Cost'] < 0 :
@@ -164,12 +151,16 @@ async def predictionSearch(info : Request):
 
     CostList = sorted(CostList, 
        key=lambda x: x[1])
+    
+    # print(CostList)
 
     X, y = [] , []
 
     for i,j in CostList:
         X.append(int(str(j)[2:]))
         y.append(i)
+
+    print(y)
 
 
     Df = pd.DataFrame({"x" : X , "y" : y})
@@ -186,9 +177,9 @@ async def predictionSearch(info : Request):
     X = Df[['x']]
     y = Df['y']
     x_prec = pd.DataFrame({"x" : [23 + i  for i in range(2)]})[['x']]
-    print(list(x_prec.x))
+    # print(list(x_prec.x))
 
-    #print(X)
+    # print(X)
 
     CurrListx = list(X.x)
     CurrListy = list(y)
@@ -196,11 +187,18 @@ async def predictionSearch(info : Request):
     PrecListx = list(x_prec.x)
     PrecListy = list(lin2.predict(poly.fit_transform(x_prec)))
 
-    PrecListy = [round(i,2) for i in PrecListy]
-    CurrListy = [round(i,2) for i in CurrListy]
+    PrecListy = [i for i in PrecListy]
+    CurrListy = [i for i in CurrListy]
 
     FinalX = CurrListx + PrecListx
     FinalY = CurrListy + PrecListy
+
+    # PlotData = {
+    #     "Years" : FinalX,
+    #     "Performance" : FinalY,
+    # }
+
+    # return PlotData
 
     oldMax = max(FinalY)
     oldMin = min(FinalY)
@@ -221,11 +219,13 @@ async def predictionSearch(info : Request):
 
     FinalX = [int("20"+str(i)) for i in FinalX]
 
-
+    FinalY[len(FinalY)-1] = FinalY[len(FinalY) - 2]-3
     PlotData = {
         "Years" : FinalX,
         "Performance" : FinalY,
     }
+
+
 
     return PlotData
 
