@@ -265,4 +265,20 @@ async def getInformation(info : Request):
     result = generateTextWithPalm(prompts.getAnalysisPrompt(query, ListOfCompanies))
     return result
 
+@app.post("/multiCompanies")
+async def multiCompanies(info : Request):
+    print(await info.body())
+    req_info = await info.json()
+    ListOfCompanies = dict(req_info)["ListOfCompanies"]
+
+    Results = []
+
+    for i in ListOfCompanies:
+        curr = List_Of_Clusters[0].find_one({"SupplierName" : i})
+        del curr["_id"]
+                                    
+        Results.append(curr)
+
+    return {"Data" : Results}
+
     
