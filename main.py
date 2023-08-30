@@ -236,12 +236,21 @@ async def numberSearch(info : Request):
     CurrString = int(dict(req_info)["No_of_Companies"])
     Results = []
 
-    query = list(List_Of_Clusters[0].find({}).limit(CurrString))
+    query = List_Of_Clusters[0].find({})
+
+
+    count = 0 
     for i in query:
-        del i['_id']
-    print(list(query))
+        if i['SupplierName'] not in [j['SupplierName'] for j in Results]:
+            del i['_id']
+            Results.append(i)
+            count += 1
+        if count == CurrString:
+            break
+
+
     finalDict = {
-        "List_of_Companies" : query
+        "List_of_Companies" : Results
     }
 
     data = finalDict
