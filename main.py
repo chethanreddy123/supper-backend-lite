@@ -49,7 +49,7 @@ from pymongo.mongo_client import MongoClient
 import pickle
 
 C1 = MongoClient('mongodb+srv://chethanreddy2002:1234@cluster0.xihwp.mongodb.net/?retryWrites=true&w=majority')
-myData1 = C1['Test']['Test']
+myData1 = C1['Test']['NewCompanies']
 
 
 List_Of_Clusters = [myData1]
