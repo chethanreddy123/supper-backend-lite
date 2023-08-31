@@ -271,6 +271,7 @@ async def getInformation(info : Request):
     req_info = await info.json()
     ListOfCompanies = dict(req_info)["ListOfCompanies"]
     FinalResults = []
+    print(ListOfCompanies)
     for i in ListOfCompanies:
         FinalResults.append(list(myData1.find({"SupplierName" : i['SupplierName']})))
     query = dict(req_info)["Query"]
