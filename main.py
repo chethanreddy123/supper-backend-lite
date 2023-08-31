@@ -274,6 +274,7 @@ async def getInformation(info : Request):
     print(ListOfCompanies)
     for i in ListOfCompanies:
         FinalResults.append(list(myData1.find({"SupplierName" : i['SupplierName']})))
+        
     query = dict(req_info)["Query"]
     result = generateTextWithPalm(prompts.getAnalysisPrompt(query, FinalResults))
     print(prompts.getAnalysisPrompt(query, FinalResults))

@@ -1,8 +1,14 @@
 def getAnalysisPrompt(query, listOfCompanies):
-    prompt = f''' Give below is query from the user on list of companies with detail of each company mentioned.
-    Analysis the details and answer the query with a small descriptive explanation of the analysis .
-    Note: Make sure that the explanation is not too long and is to the point.
-    Query : {query}
-    List of companies: {listOfCompanies}
+    prompt = f''' Analyze the following details for each company in the list. 
+    Provide a concise and descriptive explanation of your analysis in response to the query.
+    
+    Query: {query}
+    
+    List of Companies: {listOfCompanies}
+    
+    Note: Please keep the explanations brief and focused, avoiding excessive length and code outputs. 
+    There will be 10 entities in JSON format for each company, and the query pertains to these 10 entities. 
+    Ensure you have read and understood all the entities before conducting your analysis.
+    Don't use any bold letters in the answer.
     '''
     return prompt
